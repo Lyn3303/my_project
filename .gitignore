@@ -1,0 +1,22 @@
+# 编译生成的目录
+build/
+
+# IDE生成的文件
+.qtcreator/
+
+# 编译产物
+*.exe
+*.obj
+*.o
+*.moc
+
+# 临时文件
+*.tmp
+*.temp
+
+# 日志文件
+*.log
+
+# 操作系统文件
+Thumbs.db
+.DS_Store
