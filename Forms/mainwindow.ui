@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="backgroundLabel">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/mainback.jpg);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>320</y>
+      <width>451</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+QPushButton:hover {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+}
+
+QPushButton:pressed {
+    color: #0077ffff;
+    text-shadow: 0 0 15px #4400ffff, 0 0 30px #2600ffff;
+}</string>
+    </property>
+    <property name="text">
+     <string>click to start</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="title">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>651</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>101</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>ISOCP</family>
+      <pointsize>89</pointsize>
+      <italic>true</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+font: italic 89pt &quot;ISOCP&quot; !important;
+color: rgba(255, 255, 255, 0.9); /* 主文字白色，带透明度 */
+color: qconicalgradient(cx:0.454545, cy:0.54, angle:329.8, stop:0 rgba(206, 206, 206, 255), stop:0.16 rgba(76, 1, 138, 255), stop:0.225 rgba(120, 23, 158, 255), stop:0.285 rgba(147, 41, 189, 255), stop:0.345 rgba(146, 84, 235, 255), stop:0.415 rgba(126, 117, 245, 255), stop:0.52 rgba(68, 12, 209, 255), stop:0.57 rgba(5, 41, 106, 255), stop:0.635 rgba(42, 44, 168, 255), stop:0.695 rgba(31, 38, 155, 255), stop:0.744318 rgba(46, 86, 191, 255), stop:0.815 rgba(37, 83, 239, 255), stop:0.88 rgba(64, 131, 233, 255), stop:0.880682 rgba(29, 174, 250, 255), stop:1 rgba(21, 129, 209, 255));</string>
+    </property>
+    <property name="text">
+     <string>Abyss 2047</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="line">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>400</y>
+      <width>731</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(36, 208, 255, 206), stop:0.289773 rgba(58, 120, 255, 69), stop:0.505682 rgba(44, 237, 255, 156), stop:0.528409 rgba(66, 68, 255, 199), stop:1 rgba(255, 255, 255, 0));</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::HLine</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
