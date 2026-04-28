@@ -21,7 +21,6 @@ signals:
 private slots:
     void on_level1Button_clicked();
     void on_level2Button_clicked();
-    void on_level3Button_clicked();
 
 private:
     Ui::LevelSelect *ui;

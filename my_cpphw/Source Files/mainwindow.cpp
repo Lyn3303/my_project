@@ -3,7 +3,6 @@
 #include "LevelSelect.h"
 #include "Level1.h"
 #include "Level2.h"
-#include "Level3.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,12 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
     levelSelect = new LevelSelect(this);
     level1 = new Level1(this);
     level2 = new Level2(this);
-    level3 = new Level3(this);
 
     connect(levelSelect, &LevelSelect::levelSelected, this, &MainWindow::on_levelSelected);
     connect(level1, &Level1::backToMenu, this, &MainWindow::on_backToMenu);
     connect(level2, &Level2::backToMenu, this, &MainWindow::on_backToMenu);
-    connect(level3, &Level3::backToMenu, this, &MainWindow::on_backToMenu);
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +28,6 @@ MainWindow::~MainWindow()
     delete levelSelect;
     delete level1;
     delete level2;
-    delete level3;
 }
 
 void MainWindow::on_startButton_clicked()
@@ -54,7 +50,6 @@ void MainWindow::showMainMenu()
     levelSelect->hide();
     level1->hide();
     level2->hide();
-    level3->hide();
     ui->centralwidget->show();
 }
 
@@ -63,7 +58,6 @@ void MainWindow::showLevelSelect()
     ui->centralwidget->hide();
     level1->hide();
     level2->hide();
-    level3->hide();
     levelSelect->show();
     levelSelect->setGeometry(0, 0, width(), height());
 }
@@ -74,7 +68,6 @@ void MainWindow::showLevel(int level)
     levelSelect->hide();
     level1->hide();
     level2->hide();
-    level3->hide();
 
     switch (level) {
     case 1:
@@ -84,10 +77,6 @@ void MainWindow::showLevel(int level)
     case 2:
         level2->show();
         level2->setGeometry(0, 0, width(), height());
-        break;
-    case 3:
-        level3->show();
-        level3->setGeometry(0, 0, width(), height());
         break;
     }
 }

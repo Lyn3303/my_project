@@ -49,16 +49,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="level3Button">
-       <property name="text">
-        <string>关卡三</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

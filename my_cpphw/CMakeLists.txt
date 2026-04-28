@@ -24,7 +24,6 @@ set(PROJECT_SOURCES
         "Source Files/LevelSelect.cpp"
         "Source Files/Level1.cpp"
         "Source Files/Level2.cpp"
-        "Source Files/Level3.cpp"
         "Header Files/mainwindow.h"
         "Header Files/PlayerCar.h"
         "Header Files/Obstacle.h"
@@ -32,12 +31,10 @@ set(PROJECT_SOURCES
         "Header Files/LevelSelect.h"
         "Header Files/Level1.h"
         "Header Files/Level2.h"
-        "Header Files/Level3.h"
         "Forms/mainwindow.ui"
         "Forms/LevelSelect.ui"
         "Forms/Level1.ui"
         "Forms/Level2.ui"
-        "Forms/Level3.ui"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
