@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LevelSelect</class>
+ <widget class="QWidget" name="LevelSelect">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>关卡选择</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="titleLabel">
+     <property name="text">
+      <string>选择关卡</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-size: 48px; font-weight: bold;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="level1Button">
+       <property name="text">
+        <string>关卡一</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="level2Button">
+       <property name="text">
+        <string>关卡二</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="level3Button">
+       <property name="text">
+        <string>关卡三</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
