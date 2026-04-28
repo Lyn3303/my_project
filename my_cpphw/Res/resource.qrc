@@ -1,1 +1,15 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/bk">
+        <file>backgound.png</file>
+        <file>L1.png</file>
+        <file>L2.png</file>
+        <file>L3.png</file>
+        <file>L4.png</file>
+    </qresource>
+    <qresource prefix="/content">
+        <file>car.PNG</file>
+        <file>ob1.PNG</file>
+        <file>ob2.PNG</file>
+        <file>street.PNG</file>
+    </qresource>
+</RCC>
