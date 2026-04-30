@@ -10,8 +10,8 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/Forms)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 
 include_directories("Header Files")
 
@@ -20,14 +20,12 @@ set(PROJECT_SOURCES
         "Source Files/mainwindow.cpp"
         "Source Files/PlayerCar.cpp"
         "Source Files/Obstacle.cpp"
-        "Source Files/Enemy.cpp"
         "Source Files/LevelSelect.cpp"
         "Source Files/Level1.cpp"
         "Source Files/Level2.cpp"
         "Header Files/mainwindow.h"
         "Header Files/PlayerCar.h"
         "Header Files/Obstacle.h"
-        "Header Files/Enemy.h"
         "Header Files/LevelSelect.h"
         "Header Files/Level1.h"
         "Header Files/Level2.h"
@@ -61,7 +59,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(my_cpphw PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(my_cpphw PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Multimedia)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

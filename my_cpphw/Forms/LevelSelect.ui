@@ -13,45 +13,99 @@
   <property name="windowTitle">
    <string>关卡选择</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="titleLabel">
-     <property name="text">
-      <string>选择关卡</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font-size: 48px; font-weight: bold;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="level1Button">
-       <property name="text">
-        <string>关卡一</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="level2Button">
-       <property name="text">
-        <string>关卡二</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font-size: 24px; padding: 20px 40px;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
+  <widget class="QLabel" name="backgroundLabel">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>720</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(qrc:/bk/backgound.png); background-repeat: no-repeat; background-position: top center;</string>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="titleLabel">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>120</y>
+     <width>811</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-weight: bold;
+font: 69pt &quot;Bernard MT&quot;;
+color: rgb(255, 70, 237);</string>
+   </property>
+   <property name="text">
+    <string>Choose a level</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="line">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>200</y>
+     <width>671</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(qrc:/ui/divider-003.png); background-repeat: no-repeat; background-position: center; background-size: 100% 100%;</string>
+   </property>
+   <property name="text">
+    <string notr="true"/>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="level2Button">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>430</y>
+     <width>571</width>
+     <height>72</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 29pt &quot;Microsoft New Tai Lue&quot;; background-color: rgba(255, 255, 255, 0.3); border: none;
+color: rgb(252, 255, 83);</string>
+   </property>
+   <property name="text">
+    <string>Chpt2</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="level1Button">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>320</y>
+     <width>571</width>
+     <height>72</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 29pt &quot;Microsoft New Tai Lue&quot;; background-color: rgba(255, 255, 255, 0.3); border: none;
+color: rgb(252, 255, 83);</string>
+   </property>
+   <property name="text">
+    <string>Chpt1</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

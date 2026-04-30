@@ -14,37 +14,80 @@
    <string>my_cpphw</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="titleLabel">
-      <property name="text">
-       <string>横屏躲避游戏</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 48px; font-weight: bold;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="startButton">
-      <property name="text">
-       <string>开始游戏</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 32px; padding: 20px 60px;</string>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <widget class="QLabel" name="backgroundLabel">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>720</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/bk/backgound.png); background-repeat: no-repeat; background-position: top center; background-size: cover;</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="titleLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>1280</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(62, 236, 255);
+
+font: 700 125pt &quot;Magneto&quot;;
+font-weight: bold;</string>
+    </property>
+    <property name="text">
+     <string>Night Way </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startButton">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>410</y>
+      <width>401</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0.2); border: 2px solid white;
+font: 59pt &quot;Haettenschweiler&quot;;
+color: rgb(253, 255, 107);</string>
+    </property>
+    <property name="text">
+     <string>Enter</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="operateButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>131</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0.2); border: 2px solid white;
+font: 29pt &quot;Haettenschweiler&quot;;
+color: rgb(253, 255, 107);</string>
+    </property>
+    <property name="text">
+     <string>Operation</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

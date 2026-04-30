@@ -1,4 +1,5 @@
 #include "Obstacle.h"
+#include <QPainter>
 
 Obstacle::Obstacle(int lane, QObject *parent)
     : QObject(parent), m_lane(lane), m_width(60), m_height(60), m_speed(5)

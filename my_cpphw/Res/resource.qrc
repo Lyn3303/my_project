@@ -5,11 +5,28 @@
         <file>L2.png</file>
         <file>L3.png</file>
         <file>L4.png</file>
+        <file>L5.png</file>
+        <file>icon.png</file>
     </qresource>
     <qresource prefix="/content">
-        <file>car.PNG</file>
+        <file>Car.PNG</file>
         <file>ob1.PNG</file>
         <file>ob2.PNG</file>
         <file>street.PNG</file>
+    </qresource>
+    <qresource prefix="/ui">
+        <file>divider-003.png</file>
+        <file>panel-border-017.png</file>
+        <file>panel-transparent-center-020.png</file>
+    </qresource>
+    <qresource prefix="/sound">
+        <file>wind.mp3</file>
+        <file>click.mp3</file>
+        <file>shift.mp3</file>
+    </qresource>
+    <qresource prefix="/music">
+        <file>mainwindow.mp3</file>
+        <file>L1.mp3</file>
+        <file>L2.mp3</file>
     </qresource>
 </RCC>

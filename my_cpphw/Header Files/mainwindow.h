@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QWidget>
+#include <QKeyEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -10,8 +14,6 @@ class MainWindow;
 QT_END_NAMESPACE
 
 class LevelSelect;
-class Level1;
-class Level2;
 
 class MainWindow : public QMainWindow
 {
@@ -20,20 +22,21 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void stopMusic() { player->stop(); }
+    void playMusic() { player->play(); }
 
 private slots:
     void on_startButton_clicked();
-    void on_levelSelected(int level);
-    void on_backToMenu();
+    void on_operateButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     LevelSelect *levelSelect;
-    Level1 *level1;
-    Level2 *level2;
+    QMediaPlayer *player;
+    QAudioOutput *audioOutput;
+    QWidget *operateWidget;
 
-    void showMainMenu();
     void showLevelSelect();
-    void showLevel(int level);
+    void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // MAINWINDOW_H

@@ -1,4 +1,5 @@
 #include "PlayerCar.h"
+#include <QPainter>
 
 PlayerCar::PlayerCar(QObject *parent)
     : QObject(parent), m_x(400), m_y(500), m_width(60), m_height(100), m_lane(1)
