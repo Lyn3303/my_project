@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QUrl>
+#include <QIcon>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setFixedSize(1280, 720);
-    setWindowTitle("my_cpphw");
+    setWindowTitle("Night Way");
+    setWindowIcon(QIcon(":/bk/icon.ico"));
 
     QScreen *screen = QApplication::primaryScreen();
     if (screen) {
@@ -44,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     operateWidget->hide();
 
     QVBoxLayout *layout = new QVBoxLayout(operateWidget);
-    QLabel *titleLabel = new QLabel("Operation：\n PgUp 上移动 \n PgDown 下移动 \n shift 加速,可用于通过粉色弹幕 \n esc 退出游戏 \n 再次点击operation 关闭此窗口 ", operateWidget);
+    QLabel *titleLabel = new QLabel("Operation：\n Key:O 上移动 \n Key:P 下移动 \n shift 加速,可用于通过蓝色弹幕 \n esc 退出游戏 \n 再次点击operation 关闭此窗口 ", operateWidget);
     titleLabel->setStyleSheet("color: yellow; font: 29pt \"Book Antiqua\";");
     titleLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(titleLabel);
@@ -140,6 +142,7 @@ void MainWindow::showLevel2()
     level1->hide();
     level2->show();
     level2->raise();
+    level2->startLevelMusic();
 }
 
 void MainWindow::showMainWindow()
