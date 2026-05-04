@@ -31,12 +31,13 @@ Level1::Level1(QWidget *parent)
     , graphicsView(nullptr)
     , playerCar(nullptr)
     , isGameOver(false)
-    , obstacleSpawnInterval(2500)
+    , obstacleSpawnInterval(1000)
     , lastObstacleType(0)
     , windPlayTime(0)
     , bpmAccumulator(0)
     , bpm47Accumulator(0)
     , obstacleFlashTimer(nullptr)
+    , gameElapsedTime(0)
 {
     setFixedSize(1280, 720);
     setStyleSheet("background-color: black;");
@@ -280,13 +281,9 @@ void Level1::spawnObstacle()
 {
     if (isGameOver) return;
 
-    int typeValue = lastObstacleType == 0 ? 1 : 0;
-    lastObstacleType = typeValue;
+    Obstacle::ObstacleType type = static_cast<Obstacle::ObstacleType>(QRandomGenerator::global()->bounded(0, 2));
 
-    Obstacle::ObstacleType type = static_cast<Obstacle::ObstacleType>(typeValue);
-
-    int laneValue = QRandomGenerator::global()->bounded(0, 3);
-    Obstacle::Lane lane = static_cast<Obstacle::Lane>(laneValue);
+    Obstacle::Lane lane = static_cast<Obstacle::Lane>(QRandomGenerator::global()->bounded(0, 3));
 
     Obstacle *obstacle = new Obstacle(type, lane, this);
     scene->addItem(obstacle);
@@ -403,15 +400,20 @@ void Level1::updateGame()
 {
     if (isGameOver) return;
 
-    qint64 elapsed = l1Player->position();
+    gameElapsedTime += 30;
 
     int baseInterval = 1200;
-    int minInterval = 480;
+    int minInterval = 400;
     
-    double progress = static_cast<double>(elapsed) / (153 * 1000);
+    double progress = static_cast<double>(gameElapsedTime) / (153 * 1000);
     if (progress > 1.0) progress = 1.0;
     
-    obstacleSpawnInterval = baseInterval - static_cast<int>(progress * (baseInterval - minInterval));
+    int newInterval = baseInterval - static_cast<int>(progress * (baseInterval - minInterval));
+
+    if (newInterval != obstacleSpawnInterval) {
+        obstacleSpawnInterval = newInterval;
+        obstacleSpawnTimer->start(obstacleSpawnInterval);
+    }
 
     const int bpm47Interval = 1176;
     bpm47Accumulator += 30;
@@ -422,8 +424,12 @@ void Level1::updateGame()
         scene->addItem(obstacle);
         obstacles.append(obstacle);
     }
-
-    obstacleSpawnTimer->setInterval(obstacleSpawnInterval);
+    
+    static int debugCounter = 0;
+    debugCounter++;
+    if (debugCounter % 100 == 0) {
+        qDebug() << "GameTime:" << gameElapsedTime << "ms | Interval:" << obstacleSpawnInterval << "ms | Progress:" << progress;
+    }
 }
 
 void Level1::addCrash()

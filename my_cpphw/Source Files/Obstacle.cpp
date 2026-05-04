@@ -18,8 +18,8 @@ Obstacle::Obstacle(ObstacleType type, Lane lane, QObject *parent)
         obstacleHeight = 100;
     } else {
         pixmapPath = ":/content/ob2.PNG";
-        obstacleWidth = 30;
-        obstacleHeight = 100;
+        obstacleWidth = 40;
+        obstacleHeight = 125;
     }
 
     obstaclePixmap = QPixmap(pixmapPath);

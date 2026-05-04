@@ -86,6 +86,7 @@ private:
     int bpmAccumulator;
     int bpm47Accumulator;
     QTimer *obstacleFlashTimer;
+    qint64 gameElapsedTime;
 };
 
 #endif // LEVEL1_H
