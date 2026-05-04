@@ -49,6 +49,7 @@ private:
     QTimer *crashTimer;
     QTimer *shiftFlashTimer;
     QTimer *moveTimer;
+    QTimer *shakeTimer;
     bool crashVisible;
     int crashFlashCount;
     bool isShiftPressed;
@@ -57,6 +58,10 @@ private:
     bool isMoving;
     qreal moveSpeed;
     qreal targetY;
+    qreal shakeOffsetX;
+    qreal shakeOffsetY;
+    int trailLength;
+    QList<QPointF> trailPositions;
 
     void updatePosition();
     void startSmoothMove();

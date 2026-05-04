@@ -1,6 +1,7 @@
 #include "PlayerCar.h"
 #include <QPainter>
 #include <QDebug>
+#include <QRandomGenerator>
 
 PlayerCar::PlayerCar(QObject *parent)
     : QGraphicsObject(nullptr)
@@ -15,6 +16,9 @@ PlayerCar::PlayerCar(QObject *parent)
     , shiftFlashFadeIn(true)
     , isMoving(false)
     , moveSpeed(15.0)
+    , shakeOffsetX(0)
+    , shakeOffsetY(0)
+    , trailLength(8)
 {
     Q_UNUSED(parent);
 
@@ -31,18 +35,9 @@ PlayerCar::PlayerCar(QObject *parent)
     shiftFlashTimer = new QTimer(this);
     shiftFlashTimer->setInterval(50);
     connect(shiftFlashTimer, &QTimer::timeout, [this]() {
-        if (shiftFlashFadeIn) {
-            shiftFlashAlpha += 0.06;
-            if (shiftFlashAlpha >= 0.45) {
-                shiftFlashAlpha = 0.45;
-                shiftFlashFadeIn = false;
-            }
-        } else {
-            shiftFlashAlpha -= 0.06;
-            if (shiftFlashAlpha <= 0.15) {
-                shiftFlashAlpha = 0.15;
-                shiftFlashFadeIn = true;
-            }
+        trailPositions.append(QPointF(0, shakeOffsetY));
+        if (trailPositions.size() > trailLength) {
+            trailPositions.removeFirst();
         }
         update();
     });
@@ -50,6 +45,14 @@ PlayerCar::PlayerCar(QObject *parent)
     moveTimer = new QTimer(this);
     moveTimer->setInterval(16);
     connect(moveTimer, &QTimer::timeout, this, &PlayerCar::moveStep);
+
+    shakeTimer = new QTimer(this);
+    shakeTimer->setInterval(16);
+    connect(shakeTimer, &QTimer::timeout, [this]() {
+        shakeOffsetY = (QRandomGenerator::global()->bounded(-2, 3)) * 0.8;
+        update();
+    });
+    shakeTimer->start();
 
     setPos(256, 440);
     setZValue(1000);
@@ -60,6 +63,7 @@ PlayerCar::~PlayerCar()
     delete crashTimer;
     delete shiftFlashTimer;
     delete moveTimer;
+    delete shakeTimer;
 }
 
 QRectF PlayerCar::boundingRect() const
@@ -72,13 +76,24 @@ void PlayerCar::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->drawPixmap(0, 0, carPixmap);
-
     if (currentState == State::Shift) {
-        painter->fillRect(0, 0, carPixmap.width(), carPixmap.height(), QColor(135, 206, 250, static_cast<int>(shiftFlashAlpha * 255)));
-    } else if (currentState == State::Crash) {
+        int totalTrails = trailPositions.size();
+        for (int i = totalTrails - 1; i >= 0; --i) {
+            int distanceIndex = totalTrails - 1 - i;
+            qreal progress = static_cast<qreal>(distanceIndex) / (totalTrails - 1);
+            qreal alpha = 0.43 - (progress * progress * 0.4);
+            qreal offsetX = -(distanceIndex + 1) * 35;
+            painter->setOpacity(alpha);
+            painter->drawPixmap(shakeOffsetX + offsetX, trailPositions[i].y(), carPixmap);
+        }
+        painter->setOpacity(1.0);
+    }
+
+    painter->drawPixmap(shakeOffsetX, shakeOffsetY, carPixmap);
+
+    if (currentState == State::Crash) {
         if (!crashVisible) {
-            painter->fillRect(0, 0, carPixmap.width(), carPixmap.height(), QColor(255, 0, 0, 100));
+            painter->fillRect(shakeOffsetX, shakeOffsetY, carPixmap.width(), carPixmap.height(), QColor(255, 0, 0, 100));
         }
     }
 }
@@ -209,6 +224,7 @@ void PlayerCar::pressShift()
     shiftFlashAlpha = 0.3;
     shiftFlashFadeIn = true;
     shiftFlashTimer->start();
+    trailPositions.clear();
 }
 
 void PlayerCar::releaseShift()
