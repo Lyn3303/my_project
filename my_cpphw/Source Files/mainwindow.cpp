@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "LevelSelect.h"
+#include "Level1.h"
+#include "Level2.h"
 #include <QApplication>
 #include <QKeyEvent>
 #include <QScreen>
@@ -8,13 +10,15 @@
 #include <QAudioOutput>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QDebug>
+#include <QUrl>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setFixedSize(1280, 720);  
+    setFixedSize(1280, 720);
     setWindowTitle("my_cpphw");
 
     QScreen *screen = QApplication::primaryScreen();
@@ -23,7 +27,16 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     levelSelect = new LevelSelect(this);
+    levelSelect->setFixedSize(1280, 720);
     levelSelect->hide();
+
+    level1 = new Level1(this);
+    level1->setFixedSize(1280, 720);
+    level1->hide();
+
+    level2 = new Level2(this);
+    level2->setFixedSize(1280, 720);
+    level2->hide();
 
     operateWidget = new QWidget(this);
     operateWidget->setGeometry(300, 200, 680, 320);
@@ -31,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     operateWidget->hide();
 
     QVBoxLayout *layout = new QVBoxLayout(operateWidget);
-    QLabel *titleLabel = new QLabel("Operation：\n PgUp 上移动 \n PgDown 下移动 \n shift 加速,可用于通过粉色弹幕 \n esc 退出游戏 \n 再次点击operation 关闭此窗口 " , operateWidget);
+    QLabel *titleLabel = new QLabel("Operation：\n PgUp 上移动 \n PgDown 下移动 \n shift 加速,可用于通过粉色弹幕 \n esc 退出游戏 \n 再次点击operation 关闭此窗口 ", operateWidget);
     titleLabel->setStyleSheet("color: yellow; font: 29pt \"Book Antiqua\";");
     titleLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(titleLabel);
@@ -39,26 +52,62 @@ MainWindow::MainWindow(QWidget *parent)
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
-    player->setSource(QUrl("qrc:/music/mainwindow.mp3"));
+    QUrl musicUrl("qrc:/music/mainwindow.mp3");
+    qDebug() << "Music URL:" << musicUrl;
+    qDebug() << "Music URL valid:" << musicUrl.isValid();
+    player->setSource(musicUrl);
     player->setLoops(QMediaPlayer::Infinite);
     audioOutput->setVolume(0.3);
+    qDebug() << "Starting music playback...";
     player->play();
+
+    clickPlayer = new QMediaPlayer(this);
+    clickAudioOutput = new QAudioOutput(this);
+    clickPlayer->setAudioOutput(clickAudioOutput);
+    clickPlayer->setSource(QUrl("qrc:/sound/click.mp3"));
+    clickAudioOutput->setVolume(1.0);
+}
+
+void MainWindow::stopMusic()
+{
+    qDebug() << "Stopping music";
+    player->stop();
+}
+
+void MainWindow::playMusic()
+{
+    qDebug() << "Playing music, current state:" << player->playbackState();
+    if (player->playbackState() == QMediaPlayer::StoppedState) {
+        player->play();
+    } else if (player->playbackState() == QMediaPlayer::PausedState) {
+        player->play();
+    }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete levelSelect;
+    delete level1;
+    delete level2;
 }
 
 void MainWindow::on_startButton_clicked()
 {
+    if (clickPlayer) {
+        clickPlayer->stop();
+        clickPlayer->play();
+    }
     showLevelSelect();
 }
 
 void MainWindow::on_operateButton_clicked()
 {
-    if (operateWidget->isVisible()) {  //操作逻辑窗口可见时，点击操作按钮隐藏窗口
+    if (clickPlayer) {
+        clickPlayer->stop();
+        clickPlayer->play();
+    }
+    if (operateWidget->isVisible()) {
         operateWidget->hide();
     } else {
         operateWidget->show();
@@ -67,13 +116,47 @@ void MainWindow::on_operateButton_clicked()
 
 void MainWindow::showLevelSelect()
 {
-    ui->centralwidget->hide();  //隐藏主窗口
-    levelSelect->setGeometry(0, 0, width(), height());
+    ui->centralwidget->hide();
+    level1->hide();
+    level2->hide();
     levelSelect->show();
+    levelSelect->raise();
+}
+
+void MainWindow::showLevel1()
+{
+    ui->centralwidget->hide();
+    levelSelect->hide();
+    level2->hide();
+    level1->show();
+    level1->raise();
+    level1->startLevelMusic();
+}
+
+void MainWindow::showLevel2()
+{
+    ui->centralwidget->hide();
+    levelSelect->hide();
+    level1->hide();
+    level2->show();
+    level2->raise();
+}
+
+void MainWindow::showMainWindow()
+{
+    levelSelect->hide();
+    level1->hide();
+    level2->hide();
+    ui->centralwidget->show();
+    ui->centralwidget->raise();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    if (clickPlayer) {
+        clickPlayer->stop();
+        clickPlayer->play();
+    }
     if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         if (ui->centralwidget->isVisible()) {
             showLevelSelect();

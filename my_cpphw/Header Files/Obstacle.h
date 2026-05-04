@@ -2,31 +2,46 @@
 #define OBSTACLE_H
 
 #include <QObject>
-#include <QGraphicsItem>
+#include <QGraphicsObject>
+#include <QPixmap>
 
-class Obstacle : public QObject, public QGraphicsItem
+class Obstacle : public QGraphicsObject
 {
     Q_OBJECT
-    Q_INTERFACES(QGraphicsItem)
 
 public:
-    explicit Obstacle(int lane, QObject *parent = nullptr);
+    enum class ObstacleType {
+        Type1,
+        Type2
+    };
+    enum class Lane {
+        Upper,
+        Middle,
+        Lower
+    };
+
+    explicit Obstacle(ObstacleType type, Lane lane, QObject *parent = nullptr);
     ~Obstacle();
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    void updatePosition();
-    bool isOutOfScreen() const;
-    int getLane() const;
+    ObstacleType getType() const;
+    Lane getLane() const;
+    void moveLeft(qreal speed);
+    bool isOffScreen() const;
+    void triggerFlash();
+    bool isFlashing() const;
+    void updateFlash();
 
 private:
-    qreal m_x;
-    qreal m_y;
-    qreal m_width;
-    qreal m_height;
-    int m_lane;
-    int m_speed;
+    QPixmap obstaclePixmap;
+    ObstacleType obstacleType;
+    Lane obstacleLane;
+    qreal obstacleWidth;
+    qreal obstacleHeight;
+    bool flashVisible;
+    int flashCount;
 };
 
 #endif // OBSTACLE_H

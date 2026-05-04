@@ -2,32 +2,65 @@
 #define PLAYERCAR_H
 
 #include <QObject>
-#include <QGraphicsItem>
-#include <QKeyEvent>
+#include <QGraphicsObject>
+#include <QTimer>
+#include <QPixmap>
 
-class PlayerCar : public QObject, public QGraphicsItem
+class PlayerCar : public QGraphicsObject
 {
     Q_OBJECT
-    Q_INTERFACES(QGraphicsItem)
 
 public:
+    enum class State {
+        Normal,
+        Crash,
+        Shift
+    };
+    enum class Position {
+        Upper,
+        Middle,
+        Lower
+    };
+
     explicit PlayerCar(QObject *parent = nullptr);
     ~PlayerCar();
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    void moveLeft();
-    void moveRight();
+    void setState(State state);
+    State getState() const;
+    Position getPosition() const;
+
+public slots:
+    void triggerCrash();
+    void endCrash();
     void moveUp();
     void moveDown();
+    void pressShift();
+    void releaseShift();
 
 private:
-    qreal m_x;
-    qreal m_y;
-    qreal m_width;
-    qreal m_height;
-    int m_lane;
+    QPixmap carPixmap;
+    State currentState;
+    Position currentPosition;
+    qreal baseWidth;
+    qreal baseHeight;
+    QTimer *crashTimer;
+    QTimer *shiftFlashTimer;
+    QTimer *moveTimer;
+    bool crashVisible;
+    int crashFlashCount;
+    bool isShiftPressed;
+    qreal shiftFlashAlpha;
+    bool shiftFlashFadeIn;
+    bool isMoving;
+    qreal moveSpeed;
+    qreal targetY;
+
+    void updatePosition();
+    void startSmoothMove();
+    void moveStep();
 };
 
 #endif // PLAYERCAR_H

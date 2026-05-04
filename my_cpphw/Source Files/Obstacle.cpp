@@ -1,11 +1,52 @@
 #include "Obstacle.h"
 #include <QPainter>
+#include <QDebug>
 
-Obstacle::Obstacle(int lane, QObject *parent)
-    : QObject(parent), m_lane(lane), m_width(60), m_height(60), m_speed(5)
+Obstacle::Obstacle(ObstacleType type, Lane lane, QObject *parent)
+    : QGraphicsObject(nullptr)
+    , obstacleType(type)
+    , obstacleLane(lane)
+    , flashVisible(true)
+    , flashCount(0)
 {
-    m_x = 200 + lane * 200;
-    m_y = -m_height;
+    Q_UNUSED(parent);
+
+    QString pixmapPath;
+    if (type == ObstacleType::Type1) {
+        pixmapPath = ":/content/ob1.PNG";
+        obstacleWidth = 30;
+        obstacleHeight = 100;
+    } else {
+        pixmapPath = ":/content/ob2.PNG";
+        obstacleWidth = 30;
+        obstacleHeight = 100;
+    }
+
+    obstaclePixmap = QPixmap(pixmapPath);
+    qDebug() << "Loading obstacle:" << pixmapPath << "type:" << static_cast<int>(type);
+    if (obstaclePixmap.isNull()) {
+        qDebug() << "Obstacle pixmap load failed:" << pixmapPath;
+    } else {
+        qDebug() << "Original size:" << obstaclePixmap.size();
+        obstaclePixmap = obstaclePixmap.scaled(obstacleWidth, obstacleHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        qDebug() << "Scaled size:" << obstaclePixmap.size();
+    }
+
+    qreal startY;
+    switch (lane) {
+    case Lane::Upper:
+        startY = 305;
+        break;
+    case Lane::Middle:
+        startY = 440;
+        break;
+    case Lane::Lower:
+        startY = 575;
+        break;
+    }
+
+    setPos(1280, startY);
+    setZValue(800);
 }
 
 Obstacle::~Obstacle()
@@ -14,7 +55,7 @@ Obstacle::~Obstacle()
 
 QRectF Obstacle::boundingRect() const
 {
-    return QRectF(m_x, m_y, m_width, m_height);
+    return QRectF(0, 0, obstaclePixmap.width(), obstaclePixmap.height());
 }
 
 void Obstacle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -22,28 +63,54 @@ void Obstacle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setBrush(QColor("#4ECDC4"));
-    painter->drawRect(m_x, m_y, m_width, m_height);
+    painter->drawPixmap(0, 0, obstaclePixmap);
 
-    painter->setBrush(QColor("#2C3E50"));
-    painter->drawEllipse(m_x + 10, m_y + 10, 15, 15);
-    painter->drawEllipse(m_x + 35, m_y + 10, 15, 15);
-    painter->drawEllipse(m_x + 10, m_y + 35, 15, 15);
-    painter->drawEllipse(m_x + 35, m_y + 35, 15, 15);
+    if (flashCount > 0 && !flashVisible) {
+        painter->fillRect(0, 0, obstaclePixmap.width(), obstaclePixmap.height(), QColor(255, 0, 0, 150));
+    }
 }
 
-void Obstacle::updatePosition()
+Obstacle::ObstacleType Obstacle::getType() const
 {
-    m_y += m_speed;
+    return obstacleType;
+}
+
+Obstacle::Lane Obstacle::getLane() const
+{
+    return obstacleLane;
+}
+
+void Obstacle::moveLeft(qreal speed)
+{
+    setPos(pos().x() - speed, pos().y());
+}
+
+bool Obstacle::isOffScreen() const
+{
+    return pos().x() + obstaclePixmap.width() < 0;
+}
+
+void Obstacle::triggerFlash()
+{
+    flashVisible = false;
+    flashCount = 20;
     update();
 }
 
-bool Obstacle::isOutOfScreen() const
+bool Obstacle::isFlashing() const
 {
-    return m_y > 700;
+    return flashCount > 0;
 }
 
-int Obstacle::getLane() const
+void Obstacle::updateFlash()
 {
-    return m_lane;
+    if (flashCount > 0) {
+        flashCount--;
+        flashVisible = !flashVisible;
+        update();
+        if (flashCount <= 0) {
+            flashVisible = true;
+            update();
+        }
+    }
 }
