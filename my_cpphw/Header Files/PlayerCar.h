@@ -31,6 +31,7 @@ public:
     void setState(State state);
     State getState() const;
     Position getPosition() const;
+    bool isShifting() const;
 
 public slots:
     void triggerCrash();

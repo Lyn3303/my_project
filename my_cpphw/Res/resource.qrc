@@ -24,6 +24,7 @@
         <file>wind.mp3</file>
         <file>click.mp3</file>
         <file>shift.mp3</file>
+        <file>crash.mp3</file>
     </qresource>
     <qresource prefix="/music">
         <file>mainwindow.mp3</file>

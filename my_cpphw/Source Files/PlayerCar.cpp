@@ -114,6 +114,11 @@ PlayerCar::Position PlayerCar::getPosition() const
     return currentPosition;
 }
 
+bool PlayerCar::isShifting() const
+{
+    return isShiftPressed;
+}
+
 void PlayerCar::triggerCrash()
 {
     currentState = State::Crash;

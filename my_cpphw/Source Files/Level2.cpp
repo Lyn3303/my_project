@@ -61,6 +61,11 @@ Level2::Level2(QWidget *parent)
     shiftPlayer->setLoops(QMediaPlayer::Infinite);
     connect(shiftPlayer, &QMediaPlayer::playbackStateChanged, this, &Level2::onShiftFinished);
 
+    crashPlayer = new QMediaPlayer(this);
+    crashAudioOutput = new QAudioOutput(this);
+    crashPlayer->setAudioOutput(crashAudioOutput);
+    crashAudioOutput->setVolume(0.6);
+
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 1280, 720);
     scene->setBackgroundBrush(Qt::NoBrush);
@@ -94,6 +99,7 @@ void Level2::startLevelMusic()
     l2Player->setSource(QUrl("qrc:/music/L2.mp3"));
     windPlayer->setSource(QUrl("qrc:/sound/wind.mp3"));
     shiftPlayer->setSource(QUrl("qrc:/sound/shift.mp3"));
+    crashPlayer->setSource(QUrl("qrc:/sound/crash.mp3"));
 
     l2Player->play();
     windPlayer->play();
@@ -338,6 +344,8 @@ void Level2::checkCollisions()
                 if (playerCar->getState() != PlayerCar::State::Shift) {
                     obstacle->triggerFlash();
                     crashCount++;
+                    crashPlayer->setPosition(0);
+                    crashPlayer->play();
                     if (scoreLabel) {
                         scoreLabel->setText(QString("Crash：%1").arg(crashCount));
                     }
@@ -345,6 +353,8 @@ void Level2::checkCollisions()
             } else {
                 obstacle->triggerFlash();
                 crashCount++;
+                crashPlayer->setPosition(0);
+                crashPlayer->play();
                 if (scoreLabel) {
                     scoreLabel->setText(QString("Crash：%1").arg(crashCount));
                 }

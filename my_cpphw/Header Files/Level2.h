@@ -79,6 +79,8 @@ private:
     QAudioOutput *windAudioOutput;
     QMediaPlayer *shiftPlayer;
     QAudioOutput *shiftAudioOutput;
+    QMediaPlayer *crashPlayer;
+    QAudioOutput *crashAudioOutput;
     bool isGameOver;
     int obstacleSpawnInterval;
     int lastObstacleType;

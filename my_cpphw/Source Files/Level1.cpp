@@ -61,6 +61,11 @@ Level1::Level1(QWidget *parent)
     shiftPlayer->setLoops(QMediaPlayer::Infinite);
     connect(shiftPlayer, &QMediaPlayer::playbackStateChanged, this, &Level1::onShiftFinished);
 
+    crashPlayer = new QMediaPlayer(this);
+    crashAudioOutput = new QAudioOutput(this);
+    crashPlayer->setAudioOutput(crashAudioOutput);
+    crashAudioOutput->setVolume(0.6);
+
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 1280, 720);
     scene->setBackgroundBrush(Qt::NoBrush);
@@ -94,6 +99,7 @@ void Level1::startLevelMusic()
     l1Player->setSource(QUrl("qrc:/music/L1.mp3"));
     windPlayer->setSource(QUrl("qrc:/sound/wind.mp3"));
     shiftPlayer->setSource(QUrl("qrc:/sound/shift.mp3"));
+    crashPlayer->setSource(QUrl("qrc:/sound/crash.mp3"));
 
     l1Player->play();
     windPlayer->play();
@@ -294,7 +300,8 @@ void Level1::updateObstacles()
 {
     if (isGameOver) return;
 
-    qreal moveSpeed = 20.0;
+    qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
+    qreal moveSpeed = 20.0 * speedMultiplier;
 
     for (int i = obstacles.size() - 1; i >= 0; --i) {
         Obstacle *obstacle = obstacles[i];
@@ -333,6 +340,8 @@ void Level1::checkCollisions()
                 if (playerCar->getState() != PlayerCar::State::Shift) {
                     obstacle->triggerFlash();
                     crashCount++;
+                    crashPlayer->setPosition(0);
+                    crashPlayer->play();
                     if (scoreLabel) {
                         scoreLabel->setText(QString("Crash：%1").arg(crashCount));
                     }
@@ -340,6 +349,8 @@ void Level1::checkCollisions()
             } else {
                 obstacle->triggerFlash();
                 crashCount++;
+                crashPlayer->setPosition(0);
+                crashPlayer->play();
                 if (scoreLabel) {
                     scoreLabel->setText(QString("Crash：%1").arg(crashCount));
                 }
@@ -444,7 +455,8 @@ void Level1::scrollStreet()
 {
     if (isGameOver) return;
 
-    streetOffset += 20;
+    qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
+    streetOffset += 20 * speedMultiplier;
 
     if (streetOffset >= streetWidth) {
         streetOffset = 0;
@@ -458,7 +470,8 @@ void Level1::scrollBackground()
 {
     if (isGameOver) return;
 
-    bgOffset += 1;
+    qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
+    bgOffset += 1 * speedMultiplier;
 
     if (bgOffset >= bgWidth) {
         bgOffset = 0;

@@ -35,13 +35,13 @@ Obstacle::Obstacle(ObstacleType type, Lane lane, QObject *parent)
     qreal startY;
     switch (lane) {
     case Lane::Upper:
-        startY = 305;
+        startY = 355;
         break;
     case Lane::Middle:
-        startY = 440;
+        startY = 490;
         break;
     case Lane::Lower:
-        startY = 575;
+        startY = 625;
         break;
     }
 
