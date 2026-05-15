@@ -229,7 +229,7 @@ void Level2::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    if (event->key() == Qt::Key_Escape) {
+    if (event->key() == Qt::Key_Escape) {       //esc 响应退出游戏
         qDebug() << "Escape pressed in Level2";
         if (gameTimer) gameTimer->stop();
         if (bgTimer) bgTimer->stop();
@@ -243,7 +243,7 @@ void Level2::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    if (playerCar) {
+    if (playerCar) {     //车辆控制各按键操作
         switch (event->key()) {
         case Qt::Key_O:
             playerCar->moveUp();
