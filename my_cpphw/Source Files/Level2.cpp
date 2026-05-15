@@ -3,6 +3,7 @@
 #include "LevelSelect.h"
 #include "PlayerCar.h"
 #include "Obstacle.h"
+// Level2 代码复用完成
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QShowEvent>
