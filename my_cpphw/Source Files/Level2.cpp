@@ -4,6 +4,7 @@
 #include "PlayerCar.h"
 #include "Obstacle.h"
 // Level2 代码复用完成
+
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QShowEvent>
@@ -386,10 +387,6 @@ void Level2::onL2Finished()
         shiftPlayer->stop();
         showGameOverDialog();
     }
-}
-
-void Level2::onShiftFinished()
-{
 }
 
 void Level2::showGameOverDialog()
