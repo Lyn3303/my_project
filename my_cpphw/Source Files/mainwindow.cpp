@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    //设置UI
     setFixedSize(1280, 720);
     setWindowTitle("Night Way");
     setWindowIcon(QIcon(":/bk/icon.ico"));
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     titleLabel->setAlignment(Qt::AlignCenter);
     layout->addWidget(titleLabel);
 
-    player = new QMediaPlayer(this);
+    player = new QMediaPlayer(this);    //创建音乐播放器
     audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
     QUrl musicUrl("qrc:/music/mainwindow.mp3");
@@ -63,20 +63,14 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << "Starting music playback...";
     player->play();
 
-    clickPlayer = new QMediaPlayer(this);
+    clickPlayer = new QMediaPlayer(this);    //点击音效播放器
     clickAudioOutput = new QAudioOutput(this);
     clickPlayer->setAudioOutput(clickAudioOutput);
     clickPlayer->setSource(QUrl("qrc:/sound/click.mp3"));
     clickAudioOutput->setVolume(1.0);
 }
 
-void MainWindow::stopMusic()
-{
-    qDebug() << "Stopping music";
-    player->stop();
-}
-
-void MainWindow::playMusic()
+void MainWindow::playMusic()    //播放音乐
 {
     qDebug() << "Playing music, current state:" << player->playbackState();
     if (player->playbackState() == QMediaPlayer::StoppedState) {
@@ -84,6 +78,12 @@ void MainWindow::playMusic()
     } else if (player->playbackState() == QMediaPlayer::PausedState) {
         player->play();
     }
+}
+
+void MainWindow::stopMusic()   //停止播放
+{
+    qDebug() << "Stopping music";
+    player->stop();
 }
 
 MainWindow::~MainWindow()
@@ -94,7 +94,7 @@ MainWindow::~MainWindow()
     delete level2;
 }
 
-void MainWindow::on_startButton_clicked()
+void MainWindow::on_startButton_clicked()    //开始游戏按键响应
 {
     if (clickPlayer) {
         clickPlayer->stop();
@@ -103,7 +103,7 @@ void MainWindow::on_startButton_clicked()
     showLevelSelect();
 }
 
-void MainWindow::on_operateButton_clicked()
+void MainWindow::on_operateButton_clicked()    //操作教程按键响应
 {
     if (clickPlayer) {
         clickPlayer->stop();
@@ -116,7 +116,7 @@ void MainWindow::on_operateButton_clicked()
     }
 }
 
-void MainWindow::showLevelSelect()
+void MainWindow::showLevelSelect()  //跳转到选择关卡界面
 {
     ui->centralwidget->hide();
     level1->hide();
@@ -125,7 +125,7 @@ void MainWindow::showLevelSelect()
     levelSelect->raise();
 }
 
-void MainWindow::showLevel1()
+void MainWindow::showLevel1()    //跳转到关卡1界面
 {
     ui->centralwidget->hide();
     levelSelect->hide();
@@ -135,7 +135,7 @@ void MainWindow::showLevel1()
     level1->startLevelMusic();
 }
 
-void MainWindow::showLevel2()
+void MainWindow::showLevel2()  //跳转到关卡2界面
 {
     ui->centralwidget->hide();
     levelSelect->hide();
@@ -145,7 +145,7 @@ void MainWindow::showLevel2()
     level2->startLevelMusic();
 }
 
-void MainWindow::showMainWindow()
+void MainWindow::showMainWindow()    //跳转回主界面
 {
     levelSelect->hide();
     level1->hide();
@@ -154,13 +154,13 @@ void MainWindow::showMainWindow()
     ui->centralwidget->raise();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void MainWindow::keyPressEvent(QKeyEvent *event)   
 {
     if (clickPlayer) {
         clickPlayer->stop();
         clickPlayer->play();
     }
-    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {  //按键响应
         if (ui->centralwidget->isVisible()) {
             showLevelSelect();
         }

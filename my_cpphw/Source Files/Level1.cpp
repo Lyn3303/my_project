@@ -3,7 +3,7 @@
 #include "LevelSelect.h"
 #include "PlayerCar.h"
 #include "Obstacle.h"
-// Level1 游戏逻辑已完成
+
 #include <QKeyEvent>
 #include <QPixmap>
 #include <QShowEvent>
@@ -41,9 +41,9 @@ Level1::Level1(QWidget *parent)
     , gameElapsedTime(0)
 {
     setFixedSize(1280, 720);
-    setStyleSheet("background-color: black;");
+    setStyleSheet("background-color: black;"); //背景颜色设置
 
-    l1Player = new QMediaPlayer(this);
+    l1Player = new QMediaPlayer(this);          //L1音乐播放器
     l1AudioOutput = new QAudioOutput(this);
     l1Player->setAudioOutput(l1AudioOutput);
     l1AudioOutput->setVolume(0.8);
@@ -55,23 +55,23 @@ Level1::Level1(QWidget *parent)
     windAudioOutput->setVolume(0.1);
     windPlayer->setLoops(QMediaPlayer::Infinite);
 
-    shiftPlayer = new QMediaPlayer(this);
+    shiftPlayer = new QMediaPlayer(this);      //加速音乐播放器
     shiftAudioOutput = new QAudioOutput(this);
     shiftPlayer->setAudioOutput(shiftAudioOutput);
     shiftAudioOutput->setVolume(0.3);
     shiftPlayer->setLoops(QMediaPlayer::Infinite);
     connect(shiftPlayer, &QMediaPlayer::playbackStateChanged, this, &Level1::onShiftFinished);
 
-    crashPlayer = new QMediaPlayer(this);
+    crashPlayer = new QMediaPlayer(this);      //碰撞音播放器
     crashAudioOutput = new QAudioOutput(this);
     crashPlayer->setAudioOutput(crashAudioOutput);
     crashAudioOutput->setVolume(0.6);
 
-    scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 1280, 720);
+    scene = new QGraphicsScene(this);         
+       scene->setSceneRect(0, 0, 1280, 720);
     scene->setBackgroundBrush(Qt::NoBrush);
 
-    QGraphicsView *view = new QGraphicsView(scene, this);
+    QGraphicsView *view = new QGraphicsView(scene, this);  //场景设置
     view->setGeometry(0, 0, 1280, 720);
     view->setStyleSheet("background: transparent; border: none;");
     view->setAttribute(Qt::WA_TranslucentBackground);
@@ -84,10 +84,10 @@ Level1::Level1(QWidget *parent)
     view->viewport()->installEventFilter(this);
     graphicsView = view;
 
-    playerCar = new PlayerCar(this);
+    playerCar = new PlayerCar(this);  
     scene->addItem(playerCar);
 
-    scoreLabel = new QLabel(this);
+    scoreLabel = new QLabel(this);        //分数记录
     scoreLabel->setGeometry(20, 20, 200, 30);
     scoreLabel->setStyleSheet("font-size: 20px; color: rgb(255, 248, 32); background: transparent;");
     scoreLabel->setText("Crash：0");
@@ -95,23 +95,22 @@ Level1::Level1(QWidget *parent)
     qDebug() << "Level1 constructed";
 }
 
-void Level1::startLevelMusic()
+void Level1::startLevelMusic()    //总音乐播放管理器
 {
     l1Player->setSource(QUrl("qrc:/music/L1.mp3"));
     windPlayer->setSource(QUrl("qrc:/sound/wind.mp3"));
     shiftPlayer->setSource(QUrl("qrc:/sound/shift.mp3"));
     crashPlayer->setSource(QUrl("qrc:/sound/crash.mp3"));
-
     l1Player->play();
     windPlayer->play();
 
-    obstacleSpawnTimer = new QTimer(this);
+    obstacleSpawnTimer = new QTimer(this);   //障碍物生成定时器
     connect(obstacleSpawnTimer, &QTimer::timeout, this, &Level1::spawnObstacle);
     obstacleSpawnTimer->start(obstacleSpawnInterval);
 
-    obstacleFlashTimer = new QTimer(this);
+    obstacleFlashTimer = new QTimer(this);  
     obstacleFlashTimer->setInterval(50);
-    connect(obstacleFlashTimer, &QTimer::timeout, this, [this]() {
+    connect(obstacleFlashTimer, &QTimer::timeout, this, [this]() {    //障碍物闪烁定时器
         for (Obstacle *ob : obstacles) {
             if (ob->isFlashing()) {
                 ob->updateFlash();
@@ -121,7 +120,7 @@ void Level1::startLevelMusic()
     obstacleFlashTimer->start();
 }
 
-void Level1::stopLevelMusic()
+void Level1::stopLevelMusic()    //停止音乐
 {
     l1Player->stop();
     windPlayer->stop();
@@ -134,7 +133,7 @@ void Level1::stopLevelMusic()
     }
 }
 
-void Level1::showEvent(QShowEvent *event)
+void Level1::showEvent(QShowEvent *event)      
 {
     QWidget::showEvent(event);
     qDebug() << "Level1 shown, size:" << size();
@@ -173,7 +172,7 @@ void Level1::showEvent(QShowEvent *event)
         gameTimer->start(30);
     }
 
-    if (bg1 == nullptr && bg2 == nullptr) {
+    if (bg1 == nullptr && bg2 == nullptr) {  //背景设置
         QPixmap bgPixmap(":/bk/L1.png");
         qDebug() << "BG L1 loaded:" << !bgPixmap.isNull();
 
@@ -187,19 +186,17 @@ void Level1::showEvent(QShowEvent *event)
         bg1->show();
         bg1->lower();
 
-        bg2 = new QLabel(this);
+        bg2 = new QLabel(this);   //背景2衔接背景1，实现循环滚动效果
         bg2->setPixmap(scaledBg);
         bg2->setGeometry(bgWidth, -220, bgWidth, bgHeight);
         bg2->show();
         bg2->lower();
-
-        bgTimer = new QTimer(this);
+        bgTimer = new QTimer(this);  
         connect(bgTimer, &QTimer::timeout, this, &Level1::scrollBackground);
         bgTimer->start(200);
     }
-
     if (scoreLabel) {
-        scoreLabel->raise();
+        scoreLabel->raise();    
     }
     if (graphicsView) {
         graphicsView->raise();
@@ -207,7 +204,6 @@ void Level1::showEvent(QShowEvent *event)
     if (playerCar) {
         playerCar->setZValue(1000);
     }
-
     startLevelMusic();
 }
 
@@ -217,13 +213,13 @@ Level1::~Level1()
     clearObstacles();
 }
 
-void Level1::keyPressEvent(QKeyEvent *event)
+void Level1::keyPressEvent(QKeyEvent *event)  
 {
     if (isGameOver) {
         return;
     }
 
-    if (event->key() == Qt::Key_Escape) {
+    if (event->key() == Qt::Key_Escape) {       //esc响应退出游戏
         qDebug() << "Escape pressed in Level1";
         if (gameTimer) gameTimer->stop();
         if (bgTimer) bgTimer->stop();
@@ -237,7 +233,7 @@ void Level1::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    if (playerCar) {
+    if (playerCar) {     //车辆控制各按键操作
         switch (event->key()) {
         case Qt::Key_O:
             playerCar->moveUp();
@@ -271,7 +267,7 @@ void Level1::keyReleaseEvent(QKeyEvent *event)
     QWidget::keyReleaseEvent(event);
 }
 
-bool Level1::eventFilter(QObject *obj, QEvent *event)
+bool Level1::eventFilter(QObject *obj, QEvent *event)    //事件过滤器，处理键盘事件
 {
     if (obj == graphicsView->viewport() && event->type() == QEvent::KeyPress) {
         keyPressEvent(static_cast<QKeyEvent*>(event));
@@ -284,42 +280,34 @@ bool Level1::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
-void Level1::spawnObstacle()
+void Level1::spawnObstacle()    //生成障碍物
 {
-    if (isGameOver) return;
-
+    if (isGameOver) return; 
     Obstacle::ObstacleType type = static_cast<Obstacle::ObstacleType>(QRandomGenerator::global()->bounded(0, 2));
-
     Obstacle::Lane lane = static_cast<Obstacle::Lane>(QRandomGenerator::global()->bounded(0, 3));
-
     Obstacle *obstacle = new Obstacle(type, lane, this);
     scene->addItem(obstacle);
     obstacles.append(obstacle);
 }
-
-void Level1::updateObstacles()
+void Level1::updateObstacles()  //更新障碍物位置
 {
     if (isGameOver) return;
-
     qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
     qreal moveSpeed = 20.0 * speedMultiplier;
-
     for (int i = obstacles.size() - 1; i >= 0; --i) {
         Obstacle *obstacle = obstacles[i];
         obstacle->moveLeft(moveSpeed);
-
-        if (obstacle->isOffScreen()) {
-            scene->removeItem(obstacle);
-            obstacles.removeAt(i);
-            delete obstacle;
+    if (obstacle->isOffScreen()) {
+        scene->removeItem(obstacle);
+        obstacles.removeAt(i);
+        delete obstacle;
         }
     }
 }
 
-void Level1::checkCollisions()
+void Level1::tellCollisions()  //碰撞判断
 {
     if (isGameOver || !playerCar) return;
-
     qreal carX = playerCar->pos().x();
     qreal carWidth = playerCar->boundingRect().width();
     Obstacle::Lane carLane = static_cast<Obstacle::Lane>(static_cast<int>(playerCar->getPosition()));
@@ -330,13 +318,11 @@ void Level1::checkCollisions()
         if (carLane != obstacle->getLane()) {
             continue;
         }
-
         qreal obX = obstacle->pos().x();
         qreal obWidth = obstacle->boundingRect().width();
-
         bool xOverlap = (obX < carX + carWidth) && (obX + obWidth > carX);
 
-        if (xOverlap && !obstacle->isFlashing()) {
+        if (xOverlap && !obstacle->isFlashing()) {   //碰撞特效设置
             if (obstacle->getType() == Obstacle::ObstacleType::Type1) {
                 if (playerCar->getState() != PlayerCar::State::Shift) {
                     obstacle->triggerFlash();
@@ -347,7 +333,7 @@ void Level1::checkCollisions()
                         scoreLabel->setText(QString("Crash：%1").arg(crashCount));
                     }
                 }
-            } else {
+            } else {             
                 obstacle->triggerFlash();
                 crashCount++;
                 crashPlayer->setPosition(0);
@@ -360,7 +346,7 @@ void Level1::checkCollisions()
     }
 }
 
-void Level1::clearObstacles()
+void Level1::clearObstacles()    //清除障碍物
 {
     for (Obstacle *obstacle : obstacles) {
         scene->removeItem(obstacle);
@@ -369,7 +355,7 @@ void Level1::clearObstacles()
     obstacles.clear();
 }
 
-void Level1::onL1Finished()
+void Level1::onL1Finished()             //游戏结束判断
 {
     if (l1Player->playbackState() == QMediaPlayer::StoppedState && !isGameOver) {
         isGameOver = true;
@@ -383,11 +369,7 @@ void Level1::onL1Finished()
     }
 }
 
-void Level1::onShiftFinished()
-{
-}
-
-void Level1::showGameOverDialog()
+void Level1::showGameOverDialog()        //游戏结束小窗显示
 {
     QMessageBox msgBox(this);
     msgBox.setWindowTitle("Game Over");
@@ -398,8 +380,7 @@ void Level1::showGameOverDialog()
     connect(&msgBox, &QMessageBox::accepted, this, &Level1::onGameOverAccepted);
     msgBox.exec();
 }
-
-void Level1::onGameOverAccepted()
+void Level1::onGameOverAccepted()        
 {
     clearObstacles();
     if (mainWindow) {
@@ -408,7 +389,7 @@ void Level1::onGameOverAccepted()
     }
 }
 
-void Level1::updateGame()
+void Level1::updateGame()    //更新游戏状态
 {
     if (isGameOver) return;
 
@@ -419,9 +400,7 @@ void Level1::updateGame()
     
     double progress = static_cast<double>(gameElapsedTime) / (153 * 1000);
     if (progress > 1.0) progress = 1.0;
-    
     int newInterval = baseInterval - static_cast<int>(progress * (baseInterval - minInterval));
-
     if (newInterval != obstacleSpawnInterval) {
         obstacleSpawnInterval = newInterval;
         obstacleSpawnTimer->start(obstacleSpawnInterval);
@@ -431,7 +410,6 @@ void Level1::updateGame()
     bpm47Accumulator += 30;
     if (bpm47Accumulator >= bpm47Interval) {
         bpm47Accumulator = 0;
-
         Obstacle *obstacle = new Obstacle(Obstacle::ObstacleType::Type1, static_cast<Obstacle::Lane>(QRandomGenerator::global()->bounded(0, 3)), this);
         scene->addItem(obstacle);
         obstacles.append(obstacle);
@@ -444,7 +422,7 @@ void Level1::updateGame()
     }
 }
 
-void Level1::addCrash()
+void Level1::addCrash()  //增加碰撞次数
 {
     crashCount++;
     if (scoreLabel) {
@@ -452,32 +430,29 @@ void Level1::addCrash()
     }
 }
 
-void Level1::scrollStreet()
+void Level1::scrollStreet()    //滚动街道
 {
     if (isGameOver) return;
-
     qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
     streetOffset += 20 * speedMultiplier;
 
     if (streetOffset >= streetWidth) {
         streetOffset = 0;
     }
-
     street1->setGeometry(-streetOffset, height() - streetHeight, streetWidth, streetHeight);
     street2->setGeometry(streetWidth - streetOffset, height() - streetHeight, streetWidth, streetHeight);
 }
 
-void Level1::scrollBackground()
+void Level1::scrollBackground()    //滚动背景，实现循环滚动
 {
-    if (isGameOver) return;
-
+    if (isGameOver) return; 
     qreal speedMultiplier = (playerCar && playerCar->isShifting()) ? 1.25 : 1.0;
     bgOffset += 1 * speedMultiplier;
 
     if (bgOffset >= bgWidth) {
         bgOffset = 0;
     }
-
+    
     bg1->setGeometry(-bgOffset, -220, bgWidth, bgHeight);
     bg2->setGeometry(bgWidth - bgOffset, -220, bgWidth, bgHeight);
 }

@@ -49,48 +49,42 @@ Obstacle::Obstacle(ObstacleType type, Lane lane, QObject *parent)
     setZValue(800);
 }
 
-Obstacle::~Obstacle()
+QRectF Obstacle::boundingRect() const  //设置碰撞矩形
 {
+    return QRectF(0, 0, obstaclePixmap.width(), obstaclePixmap.height());  
 }
 
-QRectF Obstacle::boundingRect() const
-{
-    return QRectF(0, 0, obstaclePixmap.width(), obstaclePixmap.height());
-}
-
-void Obstacle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Obstacle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)  //绘制障碍物
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-
     painter->drawPixmap(0, 0, obstaclePixmap);
-
     if (flashCount > 0 && !flashVisible) {
         painter->fillRect(0, 0, obstaclePixmap.width(), obstaclePixmap.height(), QColor(255, 0, 0, 150));
     }
 }
 
-Obstacle::ObstacleType Obstacle::getType() const
+Obstacle::ObstacleType Obstacle::getType() const  //获取障碍物类型
 {
     return obstacleType;
 }
 
-Obstacle::Lane Obstacle::getLane() const
+Obstacle::Lane Obstacle::getLane() const  //障碍物车道
 {
     return obstacleLane;
 }
 
-void Obstacle::moveLeft(qreal speed)
+void Obstacle::moveLeft(qreal speed)  //障碍物左移
 {
     setPos(pos().x() - speed, pos().y());
 }
 
-bool Obstacle::isOffScreen() const
+bool Obstacle::isOffScreen() const  //障碍物越界判断
 {
     return pos().x() + obstaclePixmap.width() < 0;
 }
 
-void Obstacle::triggerFlash()
+void Obstacle::triggerFlash()  //障碍物闪烁
 {
     flashVisible = false;
     flashCount = 20;
@@ -102,7 +96,7 @@ bool Obstacle::isFlashing() const
     return flashCount > 0;
 }
 
-void Obstacle::updateFlash()
+void Obstacle::updateFlash()  //更新障碍物
 {
     if (flashCount > 0) {
         flashCount--;

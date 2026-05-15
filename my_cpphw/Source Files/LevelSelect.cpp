@@ -10,14 +10,12 @@ LevelSelect::LevelSelect(QWidget *parent)
 {
     ui->setupUi(this);
     setFixedSize(1280, 720);
-
     ui->line->setPixmap(QPixmap(":/ui/divider-003.png"));
     ui->line->setScaledContents(true);
-
     ui->backgroundLabel->setPixmap(QPixmap(":/bk/backgound.png"));
     ui->backgroundLabel->setScaledContents(true);
     ui->backgroundLabel->lower();
-
+    
     clickPlayer = new QMediaPlayer(this);
     clickAudioOutput = new QAudioOutput(this);
     clickPlayer->setAudioOutput(clickAudioOutput);
@@ -30,7 +28,7 @@ LevelSelect::~LevelSelect()
     delete ui;
 }
 
-void LevelSelect::keyPressEvent(QKeyEvent *event)
+void LevelSelect::keyPressEvent(QKeyEvent *event)   //按键响应
 {
     if (clickPlayer) {
         clickPlayer->stop();
@@ -42,9 +40,9 @@ void LevelSelect::keyPressEvent(QKeyEvent *event)
     QWidget::keyPressEvent(event);
 }
 
-void LevelSelect::on_level1Button_clicked()
+void LevelSelect::on_level1Button_clicked()  //关卡一跳转
 {
-    if (clickPlayer) {
+    if (clickPlayer) {      
         clickPlayer->stop();
         clickPlayer->play();
     }
@@ -54,7 +52,7 @@ void LevelSelect::on_level1Button_clicked()
     }
 }
 
-void LevelSelect::on_level2Button_clicked()
+void LevelSelect::on_level2Button_clicked()  //关卡二跳转
 {
     if (clickPlayer) {
         clickPlayer->stop();
@@ -66,9 +64,9 @@ void LevelSelect::on_level2Button_clicked()
     }
 }
 
-void LevelSelect::on_backButton_clicked()
+void LevelSelect::on_backButton_clicked()  //返回主菜单
 {
-    if (clickPlayer) {
+    if (clickPlayer) {      
         clickPlayer->stop();
         clickPlayer->play();
     }

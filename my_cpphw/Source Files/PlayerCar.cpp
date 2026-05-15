@@ -32,9 +32,9 @@ PlayerCar::PlayerCar(QObject *parent)
     crashTimer = new QTimer(this);
     connect(crashTimer, &QTimer::timeout, this, &PlayerCar::endCrash);
 
-    shiftFlashTimer = new QTimer(this);
+    shiftFlashTimer = new QTimer(this);  // 切换状态定时器
     shiftFlashTimer->setInterval(50);
-    connect(shiftFlashTimer, &QTimer::timeout, [this]() {
+    connect(shiftFlashTimer, &QTimer::timeout, [this]() {  
         trailPositions.append(QPointF(0, shakeOffsetY));
         if (trailPositions.size() > trailLength) {
             trailPositions.removeFirst();
@@ -42,11 +42,11 @@ PlayerCar::PlayerCar(QObject *parent)
         update();
     });
 
-    moveTimer = new QTimer(this);
+    moveTimer = new QTimer(this);  // 玩家移动定时器
     moveTimer->setInterval(16);
     connect(moveTimer, &QTimer::timeout, this, &PlayerCar::moveStep);
 
-    shakeTimer = new QTimer(this);
+    shakeTimer = new QTimer(this);  // 玩家震动效果显示
     shakeTimer->setInterval(16);
     connect(shakeTimer, &QTimer::timeout, [this]() {
         shakeOffsetY = (QRandomGenerator::global()->bounded(-2, 3)) * 0.8;
@@ -76,7 +76,7 @@ void PlayerCar::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (currentState == State::Shift) {
+    if (currentState == State::Shift) {      // 加速状态下的车辆拖尾效果
         int totalTrails = trailPositions.size();
         for (int i = totalTrails - 1; i >= 0; --i) {
             int distanceIndex = totalTrails - 1 - i;
@@ -104,12 +104,12 @@ void PlayerCar::setState(State state)
     update();
 }
 
-PlayerCar::State PlayerCar::getState() const
+PlayerCar::State PlayerCar::getState() const  //获取玩家状态
 {
     return currentState;
 }
 
-PlayerCar::Position PlayerCar::getPosition() const
+PlayerCar::Position PlayerCar::getPosition() const  //获取玩家位置
 {
     return currentPosition;
 }
@@ -119,7 +119,7 @@ bool PlayerCar::isShifting() const
     return isShiftPressed;
 }
 
-void PlayerCar::triggerCrash()
+void PlayerCar::triggerCrash()  //触发碰撞状态
 {
     currentState = State::Crash;
     crashVisible = true;
@@ -131,7 +131,7 @@ void PlayerCar::triggerCrash()
     update();
 }
 
-void PlayerCar::endCrash()
+void PlayerCar::endCrash() // 碰撞状态结束
 {
     crashFlashCount++;
     crashVisible = !crashVisible;
@@ -145,7 +145,7 @@ void PlayerCar::endCrash()
     }
 }
 
-void PlayerCar::moveUp()
+void PlayerCar::moveUp() // 上移动
 {
     if (isMoving) {
         return;
@@ -163,7 +163,7 @@ void PlayerCar::moveUp()
     startSmoothMove();
 }
 
-void PlayerCar::moveDown()
+void PlayerCar::moveDown() // 下移动
 {
     if (isMoving) {
         return;
@@ -181,12 +181,11 @@ void PlayerCar::moveDown()
     startSmoothMove();
 }
 
-void PlayerCar::startSmoothMove()
+void PlayerCar::startSmoothMove() // 平滑移动
 {
     qreal upperY = 305;
     qreal middleY = 440;
     qreal lowerY = 575;
-
     targetY = middleY;
     switch (currentPosition) {
     case Position::Upper:
@@ -204,7 +203,7 @@ void PlayerCar::startSmoothMove()
     moveTimer->start();
 }
 
-void PlayerCar::moveStep()
+void PlayerCar::moveStep()  //步进函数
 {
     qreal currentY = pos().y();
     qreal dy = targetY - currentY;
@@ -219,7 +218,7 @@ void PlayerCar::moveStep()
     update();
 }
 
-void PlayerCar::pressShift()
+void PlayerCar::pressShift() //转换为加速状态
 {
     if (currentState == State::Crash || isShiftPressed) {
         return;
@@ -232,7 +231,7 @@ void PlayerCar::pressShift()
     trailPositions.clear();
 }
 
-void PlayerCar::releaseShift()
+void PlayerCar::releaseShift() // 加速结束
 {
     if (!isShiftPressed) {
         return;
@@ -243,24 +242,23 @@ void PlayerCar::releaseShift()
     update();
 }
 
-void PlayerCar::updatePosition()
+void PlayerCar::updatePosition() // 更新位置
 {
     qreal upperY = 305;
     qreal middleY = 440;
     qreal lowerY = 575;
-
     qreal y = middleY;
-    switch (currentPosition) {
-    case Position::Upper:
-        y = upperY;
-        break;
-    case Position::Middle:
-        y = middleY;
-        break;
-    case Position::Lower:
-        y = lowerY;
-        break;
+    switch (currentPosition) 
+    {
+        case Position::Upper:
+            y = upperY;
+            break;
+        case Position::Middle:
+            y = middleY;
+            break;
+        case Position::Lower:
+            y = lowerY;
+            break;
     }
-
     setPos(256, y);
 }
